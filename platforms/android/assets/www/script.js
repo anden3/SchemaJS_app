@@ -21,9 +21,6 @@ var header = document.getElementById("header"),
     currentDay,
     lastNumbersArr = [0, 0, 0, 0],
 
-    is_touch_device = 'ontouchstart' in document.documentElement,
-    screenOrientation = ($(window).width() > $(window).height())? 90 : 0,
-
     popupVisible = false,
     schoolChanged = false,
     noWeeks = null,
@@ -38,51 +35,14 @@ var header = document.getElementById("header"),
     foodDescs = [],
     food = {};
 
-
-//Function to create a cookie
-var createCookie = function (name, value, days) {
-    var expires = " ";
-
-    if (days) { //If days is defined, create regular cookie
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toGMTString();
-    }
-
-    document.cookie = name + "=" + value + expires + "; path=/";
-};
-
-//Function to read a cookie
-var readCookie = function (name) {
-    var nameEQ = name + "=",
-        ca = document.cookie.split(";");
-
-    for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-
-        while (c.charAt(0) === ' ') {
-            c = c.substring(1, c.length);
-        }
-
-        if (c.indexOf(nameEQ) === 0) {
-            return c.substring(nameEQ.length, c.length);
-        }
-    }
-    return null; //If cookie doesn't exist, return null
-};
-
 //Updating the values with the ones stored in cookies or localstorage, as well as adding the current week and day
 var setDefaultValues = function () {
     var cookies = ["schoolID", "schoolName", "scheduleType", "userID", "classID", "roomID", "teacherName", "teacherID", "subjectID"];
 
     for (var i = 0; i < cookies.length; i++) {
-        var value = cookies[i],
-            upper = value.toUpperCase();
+        var value = cookies[i];
 
-        if (readCookie(upper) !== null && readCookie(upper) !== "") {
-            window[value] = readCookie(upper);
-        }
-        else if (localStorage.getItem(value) !== null && localStorage.getItem(value) !== "" && typeof localStorage.getItem(value) !== "undefined") {
+        if (localStorage.getItem(value) !== null && localStorage.getItem(value) !== "" && typeof localStorage.getItem(value) !== "undefined") {
             window[value] = localStorage.getItem(value);
         }
         else {
@@ -99,15 +59,7 @@ var setDefaultValues = function () {
     }
 
     //Ensures the proper radio button is checked
-    if (readCookie("IDTYPE") !== null) {
-        IDType = readCookie("IDTYPE");
-        if (IDType.length >= 10) {
-            document.getElementById("userRadio").checked = true;
-        } else {
-            document.getElementById("classRadio").checked = true;
-        }
-    }
-    else if (localStorage.IDType !== null && typeof localStorage.IDType !== "undefined") {
+    if (localStorage.IDType !== null && typeof localStorage.IDType !== "undefined") {
         IDType = localStorage.IDType;
         if (IDType.length >= 10) {
             document.getElementById("userRadio").checked = true;
@@ -264,7 +216,7 @@ var getImage = function () {
 
     headerHeight = Math.round(headerHeightValue.substring(0, headerHeightValue.length - 2));
 
-    if (readCookie("COOKIECONSENT") !== "accepted" && localStorage.cookieConsent !== "accepted") {
+    if (localStorage.cookieConsent !== "accepted") {
         var consentBanner = document.getElementById("consent-banner"),
             consentBannerStyle = getComputedStyle(consentBanner),
             consentBannerHeightValue = consentBannerStyle.getPropertyValue("height");
@@ -303,34 +255,6 @@ var setImage = function (ID, width, height) {
         //Returns the image
         var url = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=" + schoolID + "/sv-se&type=-1&id=" + ID + "&period=&week=" + week + "&mode=1&printer=0&colors=32&head=0&clock=1&foot=0&day=" + today + "&width=" + width + "&height=" + height + "&maxwidth=" + width + "&maxheight=" + height;
 
-        //Checking for error pages, and if so, tries to get image without week variable. Currently disabled due to not being needed.
-        /*
-        if (noWeeks === null) {
-            $.post("get_color.php", {
-                url: url
-            }, function (data) {
-                if (data === "FFFFCC") {
-                    noWeeks = true;
-                    $("#progress").css("display", "none");
-                    setImage(ID, width, height);
-                }
-                else {
-                    noWeeks = false;
-                    setImage(ID, width, height);
-                }
-            });
-        }
-
-        else if (noWeeks) {
-            var url = "http://www.novasoftware.se/ImgGen/schedulegenerator.aspx?format=png&schoolid=" + schoolID + "/sv-se&type=-1&id=" + ID + "&period=&week=&mode=1&printer=0&colors=32&head=0&clock=1&foot=0&day=" + today + "&width=" + width + "&height=" + height + "&maxwidth=" + width + "&maxheight=" + height;
-
-            background.style.backgroundImage = 'url(' + url + ')';
-        }
-        else if (!noWeeks) {
-            background.style.backgroundImage = 'url(' + url + ')';
-        }
-        */
-
         background.style.backgroundImage = 'url(' + url + ')';
     }
     else {
@@ -354,12 +278,12 @@ var togglePopup = function (toggle, div) {
         div.style.display = "block";
 
         //Getting the width of the settings window
-        var divStyle = getComputedStyle(div);
-        var divWidth = divStyle.getPropertyValue("width");
+        var divWidth = getComputedStyle(div).getPropertyValue("width");
 
         //Setting the settings window to the middle of the screen
         div.style.left = (window.innerWidth - divWidth.substring(0, divWidth.length - 2)) / 2 + "px";
         div.style.top = (Math.round((headerHeight / window.innerHeight) * 100) + 1.8) + "vh";
+
         background.style.webkitFilter = "blur(2px)"; //Blurring the background
         document.getElementById("progress").style.webkitFilter = "blur(2px)";
     }
@@ -420,21 +344,12 @@ var submitSettings = function (direction) {
     }
 
     //Saving the variables to cookies
-    if (readCookie("COOKIECONSENT") === "accepted" || localStorage.cookieConsent === "accepted") {
-        for (var i = 0; i < values.length - 1; i++) {
-            localStorage.setItem(values[i], window[values[i]]);
-            var tempArray = values[i].toUpperCase();
-            createCookie(tempArray, window[values[i]], 365);
-        }
-    }
-    else {
+    if (localStorage.cookieConsent !== "accepted") {
         $(".consent-banner").css("display", "block");
+    }
 
-        for (var i = 0; i < values.length - 1; i++) {
-            localStorage.setItem(values[i], window[values[i]]);
-            var tempArray = values[i].toUpperCase();
-            createCookie(tempArray, window[values[i]], 0);
-        }
+    for (var i = 0; i < values.length - 1; i++) {
+        localStorage.setItem(values[i], window[values[i]]);
     }
 
     //Getting the week from the number field
@@ -590,89 +505,33 @@ var parseSearchResults = function (data, id) {
 //Adding event listeners for different events
 var eventListeners = function () {
     //If the window is resized, update the background image, and show the settings again if they were visible
-    window.addEventListener("resize", function () {
-        if (is_touch_device) {
-            var oldOrientation = screenOrientation,
-                newOrientation = ($(window).width() > $(window).height())? 90 : 0;
-
-            if (newOrientation !== oldOrientation) {
-                screenOrientation = newOrientation;
-
-                if (popupVisible) {
-                    togglePopup(1, settings);
-                }
-                getImage();
-            }
-        }
-        else {
+    window.addEventListener("orientationchange", function () {
+        setTimeout(function () {
             if (popupVisible) {
                 togglePopup(1, settings);
             }
+
             getImage();
-        }
+        }, 200);
     });
 
-    //Checking if the client has a touch screen
     var textFields = document.getElementsByClassName("mdl-textfield__input"), //Save all text field elements to an array
         radioButtons = document.getElementsByClassName("mdl-radio__button"),
         searchFields = ["#schoolID", "#classID", "#roomID", "#teacherID", "#subjectID"];
 
 
-    //If so, check for touchstart/end events instead of click events
-    if (is_touch_device) {
-        swipedetect(background, function (swipedir) {
-            if (swipedir != "none") {
-                submitSettings(swipedir);
-            }
-        });
-    }
-
-    /*
-    var typingTimer,
-        typingThreshold = 0;
-    */
+    //Check for touchstart/end events
+    swipedetect(background, function (swipedir) {
+        if (swipedir != "none") {
+            submitSettings(swipedir);
+        }
+    });
 
     for (var i = 0; i < searchFields.length; i++) {
         $(searchFields[i]).keyup(function (event) {
-            //clearTimeout(typingTimer);
-
-            //typingTimer = setTimeout(function () {
-                if (isNaN(event.target.value) || event.target.value === "") {
-                    var table;
-                    if (event.target.id.substring(0, event.target.id.length - 2) === "class") {
-                        table = "classes";
-                    }
-                    else {
-                        table = event.target.id.substring(0, event.target.id.length - 2) + "s";
-                    }
-
-                    $.post("http://schema.kodlabb.se/search_sql.php", {
-                        data: event.target.value,
-                        table: table,
-                        school: schoolID,
-                        mobile: is_touch_device
-                    }, function (data) {
-						console.log(data);
-                        var id = event.target.id;
-
-                        id = id.substring(0, id.length - 2);
-                        id = id + "Options";
-
-                        parseSearchResults(data, id);
-                    });
-                }
-            //}, typingThreshold);
-        });
-
-        /*
-        $(searchFields[i]).keydown(function () {
-            clearTimeout(typingTimer);
-        });
-        */
-
-        $(searchFields[i]).focusin(function (event) {
             if (isNaN(event.target.value) || event.target.value === "") {
                 var table;
+
                 if (event.target.id.substring(0, event.target.id.length - 2) === "class") {
                     table = "classes";
                 }
@@ -684,9 +543,35 @@ var eventListeners = function () {
                     data: event.target.value,
                     table: table,
                     school: schoolID,
-                    mobile: is_touch_device
+                    mobile: true
                 }, function (data) {
-					console.log(data);
+                    var id = event.target.id;
+
+                    id = id.substring(0, id.length - 2);
+                    id = id + "Options";
+
+                    parseSearchResults(data, id);
+                });
+            }
+        });
+
+        $(searchFields[i]).focusin(function (event) {
+            if (isNaN(event.target.value) || event.target.value === "") {
+                var table;
+
+                if (event.target.id.substring(0, event.target.id.length - 2) === "class") {
+                    table = "classes";
+                }
+                else {
+                    table = event.target.id.substring(0, event.target.id.length - 2) + "s";
+                }
+
+                $.post("http://schema.kodlabb.se/search_sql.php", {
+                    data: event.target.value,
+                    table: table,
+                    school: schoolID,
+                    mobile: true
+                }, function (data) {
                     var id = event.target.id;
 
                     id = id.substring(0, id.length - 2);
@@ -879,7 +764,6 @@ var eventListeners = function () {
 
     $("#cookie-accept").click(function () {
         $(".consent-banner").css("display", "none");
-        createCookie("COOKIECONSENT", "accepted", 365);
 		localStorage.setItem("cookieConsent", "accepted");
         getImage();
     });
@@ -935,7 +819,6 @@ var getFoods = function () {
     $.post("http://schema.kodlabb.se/get_foods.php", {
         school: schoolID
     }, function (data) {
-		console.log(data);
         if (data !== "") {
             foodWeeks = {};
             foodDays = {};
@@ -1008,20 +891,14 @@ var guid = function () {
 }
 
 var updateCounter = function (json) {
-    if (readCookie("UUID") === null || readCookie("UUID") === "" || typeof readCookie("UUID") === "undefined") {
-        createCookie("UUID", guid(), 365);
-    }
-
     if (localStorage.getItem("uuid") === null || localStorage.getItem("uuid") === "" || typeof localStorage.getItem("uuid") === "undefined") {
-        localStorage.setItem("uuid", readCookie("UUID"));
+        localStorage.setItem("uuid", guid());
     }
 
     $.post("http://schema.kodlabb.se/update_counter.php", {
         ip: json.ip,
-        uuid: readCookie("UUID")
-    }, function (data) {
-		console.log(data);
-	});
+        uuid: localStorage.uuid
+    });
 }
 
 $('form').submit(false);

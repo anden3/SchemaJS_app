@@ -1,20 +1,20 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.andre.SchemaJS" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.andre.SchemaJS" version="0.0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>SchemaJS</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        An app that easily lets you see your schedule, lunch, and more.
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="andre.vennberg@gmail.com" href="http://schema.kodlabb.se">
+        André Vennberg
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
-    <allow-intent href="http://*/*" />
+    <allow-intent href="mailto:*" />
+    <!--<allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
@@ -22,5 +22,5 @@
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-    </platform>
+    </platform>-->
 </widget>
