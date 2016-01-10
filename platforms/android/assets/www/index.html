@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!--Sets the width to the width of the device, stops pinch zooming, and sets proper zoom level-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
+
+    <!-- Chrome, Firefox OS and Opera -->
+    <meta name="theme-color" content="#3F51B5">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#3F51B5">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#3F51B5">
+
+    <title>SchemaJS</title>
+
+    <!--Importing jQuery and Google Material Design libraries-->
+    <script type="text/javascript" src="jquery-2.1.4.js"></script>
+
+    <link rel="stylesheet" href="material.indigo-pink.min.css">
+    <script src="material.min.js" async></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <script src="http://jsconsole.com/remote.js?E4A9FAB8-F593-4CBC-B83B-942888415447"></script>
+
+    <script type="text/javascript" src="script.js" charset="utf-8" defer></script>
+    <link type="text/css" rel="stylesheet" href="stylesheet.css">
+
+    <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=updateCounter" defer></script>
+</head>
+
+<body id="body">
+    <div class="header" id="header">
+        <h3>SchemaJS</h3>
+        <button id="mainMenu" class="mdl-button mdl-js-button mdl-button--icon clickable">
+            <i class="material-icons">more_vert</i>
+        </button>
+
+        <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="mainMenu">
+            <li class="mdl-menu__item clickable" id="settingsButton">Inställningar</li>
+            <li class="mdl-menu__item clickable" id="aboutButton">Om</li>
+        </ul>
+        <div id="food"></div>
+    </div>
+    <div id="schedule"></div>
+    <div id="progress"></div>
+    <div class="settings" id="settings">
+        <div class="row">
+            <h4>Inställningar</h4>
+        </div>
+        <div class="options">
+            <div class="row days">
+                <p>Dag: </p>
+                <button id="dayPicker" class="mdl-button mdl-js-button mdl-button--icon clickable"></button>
+
+                <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="dayPicker">
+                    <li class="mdl-menu__item clickable" id="Vecka">Vecka</li>
+                    <li class="mdl-menu__item clickable" id="Måndag">Måndag</li>
+                    <li class="mdl-menu__item clickable" id="Tisdag">Tisdag</li>
+                    <li class="mdl-menu__item clickable" id="Onsdag">Onsdag</li>
+                    <li class="mdl-menu__item clickable" id="Torsdag">Torsdag</li>
+                    <li class="mdl-menu__item clickable" id="Fredag">Fredag</li>
+                </ul>
+            </div>
+            <div class="row">
+                <p>Vecka: </p>
+                <form action="#">
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="week" />
+                        <label class="mdl-textfield__label" for="week" id="weekLabel"></label>
+                        <span class="mdl-textfield__error">Måste vara ett nummer</span>
+                    </div>
+                </form>
+            </div>
+            <div class="schoolOptions option">
+                <div class="row">
+                    <p>Skola: </p>
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="schoolID" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row radio">
+                <p>Typ av schema: </p>
+                <span class="radio">
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect clickable" for="studentRadio">
+                        <input type="radio" id="studentRadio" class="mdl-radio__button" name="type" value="1" checked />
+                        <span class="mdl-radio__label">Elev</span>
+                    </label>
+                </span>
+                <span class="radio">
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect clickable" for="roomRadio">
+                        <input type="radio" id="roomRadio" class="mdl-radio__button" name="type" value="1" />
+                        <span class="mdl-radio__label">Sal</span>
+                    </label>
+                </span>
+                <span class="radio">
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect clickable" for="teacherRadio">
+                        <input type="radio" id="teacherRadio" class="mdl-radio__button" name="type" value="1" />
+                        <span class="mdl-radio__label">Lärare</span>
+                    </label>
+                </span>
+                <span class="radio">
+                    <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect clickable" for="subjectRadio">
+                        <input type="radio" id="subjectRadio" class="mdl-radio__button" name="type" value="1" />
+                        <span class="mdl-radio__label">Ämne</span>
+                    </label>
+                </span>
+            </div>
+            <div class="studentOptions option">
+                <div class="row">
+                    <p>Personnummer: </p>
+                    <form action="#" method="post">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="userID" />
+                            <label class="mdl-textfield__label" for="userID" id="userIDLabel"></label>
+                        </div>
+                    </form>
+                </div>
+                <div class="classOptions option">
+                    <div class="row">
+                        <p>Klass-ID: </p>
+                        <form action="#">
+                            <div class="mdl-textfield mdl-js-textfield">
+                                <input class="mdl-textfield__input" type="text" id="classID" />
+                                <label class="mdl-textfield__label" for="classID" id="classIDLabel"></label>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row radio">
+                    <p>Typ av schema: </p>
+                    <span class="radio">
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect clickable" for="userRadio">
+                            <input type="radio" id="userRadio" class="mdl-radio__button" name="user" value="1" checked />
+                            <span class="mdl-radio__label">Personligt</span>
+                        </label>
+                    </span>
+                    <span class="radio">
+                        <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect clickable" for="classRadio">
+                            <input type="radio" id="classRadio" class="mdl-radio__button" name="user" value="1" />
+                            <span class="mdl-radio__label">Klass</span>
+                        </label>
+                    </span>
+                </div>
+            </div>
+            <div class="roomOptions option">
+                <div class="row">
+                    <p>Sal: </p>
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="roomID" />
+                            <label class="mdl-textfield__label" for="roomID" id="roomIDLabel"></label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="teacherOptions option">
+                <div class="row">
+                    <p>Lärare: </p>
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="teacherID" name="" />
+                            <label class="mdl-textfield__label" for="teacherID" id="teacherIDLabel"></label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="subjectOptions option">
+                <div class="row">
+                    <p>Ämne: </p>
+                    <form action="#">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="subjectID" />
+                            <label class="mdl-textfield__label" for="subjectID" id="subjectIDLabel"></label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row buttons">
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored clickable" id="submitSettings">Verkställ</button>
+                <button class="mdl-button mdl-js-button mdl-button--raised clickable" id="cancelSettings">Avbryt</button>
+            </div>
+        </div>
+    </div>
+    <div class="about" id="about">
+        <div class="row">
+            <h4>Om</h4>
+        </div>
+        <div class="row">
+            <p>Kontakta mig gärna om du har frågor:<br><a href="mailto:andre.vennberg@gmail.com">andre.vennberg@gmail.com</a></p>
+        </div>
+        <div class="row">
+            <p>Copyright &copy; André Vennberg, 2015</p>
+        </div>
+    </div>
+    <div class="consent-banner" id="consent-banner">
+        <div class="row">
+            <h4>Cookies</h4>
+            <p>Denna sida använder cookies för att spara information som t.ex. skola, klass och schematyp.<br>Tryck på knappen till höger för att acceptera användandet av cookies.</p>
+        </div>
+        <div class="cookie-button">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored clickable" id="cookie-accept">Acceptera</button>
+        </div>
+    </div>
+</body>
+
+</html>
