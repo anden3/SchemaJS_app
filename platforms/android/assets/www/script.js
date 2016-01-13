@@ -519,7 +519,6 @@ var eventListeners = function () {
         radioButtons = document.getElementsByClassName("mdl-radio__button"),
         searchFields = ["#schoolID", "#classID", "#roomID", "#teacherID", "#subjectID"];
 
-
     //Check for touchstart/end events
     swipedetect(background, function (swipedir) {
         if (swipedir != "none") {

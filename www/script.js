@@ -193,7 +193,7 @@ var progressBar = function () {
     var timeBetween = endTime - startTime,
         percentComplete = (now - startTime) / timeBetween,
         pixelDistance = (scheduleHeight - (window.innerHeight / 9.5)) * percentComplete,
-        correction = window.innerHeight * 0.115;
+        correction = window.innerHeight * 0.09;
 
     if (percentComplete < 1 && percentComplete > 0 && days[now.getActualDay()] === currentDay && !noWeeks) {
         bar.style.display = "block";
@@ -512,6 +512,7 @@ var eventListeners = function () {
             }
 
             getImage();
+            progressBar();
         }, 200);
     });
 
