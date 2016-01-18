@@ -1,9 +1,11 @@
+@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;src:local('Material Icons'),local('MaterialIcons-Regular'),url(https://fonts.gstatic.com/s/materialicons/v10/2fcrYFNaTjcS6g4U3t-Y5UEw0lE80llgEseQY3FEmqw.woff2)format('woff2');}
+ .material-icons{font-family:'Material Icons';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;}
 body{margin:0;position:absolute;top:0;left:0;right:0;bottom:0;}
 .header{background-color:#3F51B5;position:absolute;top:0px;width:100%;height:6vh;text-align:center;vertical-align:middle;line-height:6vh;box-shadow:0 8px 17px 0 rgba(0, 0, 0, 0.2);}
 .header div ul{box-shadow:0 12px 15px 0 rgba(0, 0, 0, 0.24);padding:0;}
 .header button{color:white;position:relative;padding:0;margin:0 0 0 1vh;float:left;height:6vh;width:6vh;}
 .header i{font-size:6vh;padding:0;margin:0 0 0 -1.5vh;}
-.header h3{display:inline;color:white;padding:0;margin:0 0 0 -6vh;font-size:4vh;vertical-align:middle;line-height:6vh;}
+.header h3{position:absolute;transform:translate(-50%, 0);margin:0 0 0 0;left:50%;color:white;padding:0;font-size:4vh;line-height:6vh;}
 #food{padding:0;position:absolute;top:6vh;z-index:1;width:100%;height:6vh;background-color:#3F51B5;text-align:center;display:none;box-shadow:0 8px 17px 0 rgba(0, 0, 0, 0.2);}
 #food *{font-size:2vh;vertical-align:middle;line-height:6vh;z-index:10;color:white;white-space:nowrap;}
 #schedule{margin-top:6vh;width:100%;height:88%;z-index:0;}
